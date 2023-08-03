@@ -1,11 +1,13 @@
 use std::f32::consts::PI;
 
-use hecs::{Entity, World};
+use hecs::World;
 use macroquad::input::{is_key_down, is_key_pressed, KeyCode};
 
 use crate::components::{MaxSpeed, Position, Rotation, Speed, UnderControl, VelocityPower};
+use crate::utils;
 
-pub fn handle_movement_controls(world: &mut World, ship: Entity) {
+pub fn handle_movement_controls(world: &mut World) {
+    let ship = utils::get_ship(world);
     let (_pos, rot, speed, _under_control, velocity_power, max_speed) = world.query_one_mut::<(&Position, &mut Rotation, &mut Speed, &UnderControl, &mut VelocityPower, &MaxSpeed)>(ship).unwrap();
 
     if is_key_pressed(KeyCode::W) {
@@ -25,13 +27,5 @@ pub fn handle_movement_controls(world: &mut World, ship: Entity) {
     }
     if is_key_down(KeyCode::D) {
         rot.0 -= PI / 180.0;
-    }
-}
-
-pub fn handle_fire_controls(world: &mut World, ship_pos_and_rot: (&Position, &Rotation)) {
-    let pos = ship_pos_and_rot.0;
-    let rot = ship_pos_and_rot.1;
-    if is_key_pressed(KeyCode::Q) {
-        world.spawn((Position { x: pos.x-16.0, y: pos.y-8.0 }, Rotation(rot.0)));
     }
 }

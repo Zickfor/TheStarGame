@@ -1,17 +1,19 @@
 use std::collections::HashMap;
 use hecs::{Entity, World};
 use macroquad::prelude::Texture2D;
-use crate::components::{Position, Rotation};
 
+pub mod startup;
 pub mod physics;
 pub mod render;
 pub mod controls;
 
-pub fn systems(world: &mut World, ship: Entity, textures: &HashMap<&str, Texture2D>) {
-    controls::handle_movement_controls(world, ship);
-    controls::handle_fire_controls(&mut Default::default(), world.query_one::<(&Position, &Rotation)>(ship).unwrap().get().unwrap());
+pub fn systems_startup(world: &mut World) -> Entity {
+    startup::create_asteroids(world, 100);
+    startup::create_ship(world)
+}
 
+pub fn systems_cycled(world: &mut World, textures: &HashMap<&str, Texture2D>) {
+    controls::handle_movement_controls(world);
     physics::system_motion(world);
-
     render::texture_drawer(world, textures);
 }
