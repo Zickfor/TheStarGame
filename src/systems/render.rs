@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use hecs::World;
 use macroquad::camera::{Camera2D, set_camera};
 use macroquad::math::Rect;
@@ -5,7 +6,8 @@ use macroquad::window::{clear_background, screen_height, screen_width};
 
 use macroquad::texture::{draw_texture_ex, DrawTextureParams};
 use macroquad::color::{BLACK, WHITE};
-use crate::components::{ObjectType, Position, Rotation, Textures, UnderControl};
+use macroquad::prelude::Texture2D;
+use crate::components::{ObjectType, Position, Rotation, UnderControl};
 
 pub fn camera_set_on_position(pos: &Position) {
     let camera = Camera2D::from_display_rect(Rect {
@@ -23,7 +25,7 @@ pub fn set_camera_on_ship(world: &mut World) {
     }
 }
 
-pub fn texture_drawer(world: &mut World, textures: Textures) {
+pub fn texture_drawer(world: &mut World, textures: &HashMap<&str, Texture2D>) {
     clear_background(BLACK);
     set_camera_on_ship(world);
     for (_id, (pos, rot, object_type)) in world.query_mut::<(&Position, &Rotation, &ObjectType)>() {
@@ -38,13 +40,13 @@ pub fn texture_drawer(world: &mut World, textures: Textures) {
 
         match object_type {
             ObjectType::Ship => {
-                draw_texture_ex(textures.ship, pos.x, pos.y, WHITE, params)
+                draw_texture_ex(textures.get("ship").unwrap(), pos.x, pos.y, WHITE, params)
             },
             ObjectType::Asteroid => {
-                draw_texture_ex(textures.asteroid, pos.x, pos.y, WHITE, params)
+                draw_texture_ex(textures.get("asteroid").unwrap(), pos.x, pos.y, WHITE, params)
             },
             ObjectType::Bullet => {
-                draw_texture_ex(textures.bullet, pos.x, pos.y, WHITE, params)
+                draw_texture_ex(textures.get("bullet").unwrap(), pos.x, pos.y, WHITE, params)
             }
         }
     }

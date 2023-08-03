@@ -21,10 +21,10 @@ pub fn handle_movement_controls(world: &mut World, ship: Entity) {
         speed.0 = max_speed.0 * velocity_power.0;
     }
     if is_key_down(KeyCode::A) {
-        rot.0 -= PI / 180.0;
+        rot.0 += PI / 180.0;
     }
     if is_key_down(KeyCode::D) {
-        rot.0 += PI / 180.0;
+        rot.0 -= PI / 180.0;
     }
 }
 

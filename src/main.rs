@@ -1,9 +1,10 @@
+use std::collections::HashMap;
 use hecs;
 use hecs::*;
 
 use macroquad::prelude::*;
 use macroquad::rand::gen_range;
-use components::{MaxSpeed, ObjectType, Position, Rotation, Size, Speed, Textures, UnderControl, VelocityPower};
+use components::{MaxSpeed, ObjectType, Position, Rotation, Size, Speed, UnderControl, VelocityPower};
 
 
 mod systems;
@@ -41,14 +42,13 @@ async fn main() {
     let ship = create_ship(&mut world);
     create_asteroids(&mut world, 100);
 
-    let textures = Textures {
-        ship: load_texture("assets/ship.png").await.unwrap(),
-        asteroid: load_texture("assets/asteroid.png").await.unwrap(),
-        bullet: load_texture("assets/bullet.png").await.unwrap(),
-    };
+    let mut textures: HashMap<&str, Texture2D> = HashMap::new();
+    textures.insert("ship", load_texture("assets/ship.png").await.unwrap());
+    textures.insert("asteroid", load_texture("assets/asteroid.png").await.unwrap());
+    textures.insert("bullet", load_texture("assets/bullet.png").await.unwrap());
 
     loop {
-        systems::systems(&mut world, ship, textures);
+        systems::systems(&mut world, ship, &textures);
         next_frame().await
     }
 }

@@ -1,4 +1,3 @@
-use macroquad::prelude::Texture2D;
 use crate::f32;
 
 #[derive(Debug)]
@@ -15,13 +14,6 @@ pub enum ObjectType {
     Ship,
     Asteroid,
     Bullet,
-}
-
-#[derive(Clone, Copy)]
-pub struct Textures {
-    pub(crate) ship: Texture2D,
-    pub(crate) asteroid: Texture2D,
-    pub(crate) bullet: Texture2D,
 }
 
 #[derive(Debug, PartialEq)]
