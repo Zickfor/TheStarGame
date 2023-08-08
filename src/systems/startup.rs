@@ -3,7 +3,7 @@ use macroquad::rand::gen_range;
 use macroquad::math::u32;
 use crate::components::{MaxSpeed, ObjectType, Position, Rotation, Size, Speed, UnderControl, VelocityPower};
 
-pub(super) fn create_ship(world: &mut World) -> Entity {
+pub fn create_ship(world: &mut World) -> Entity {
     world.spawn((
         Position { x: 0.0, y: 0.0 },
         Speed(0.0),
@@ -23,7 +23,7 @@ fn create_asteroid(world: &mut World) -> Entity {
                         ObjectType::Asteroid))
 }
 
-pub(super) fn create_asteroids(world: &mut World, n: u32) {
+pub fn create_asteroids(world: &mut World, n: u32) {
     for _ in 0..n {
         create_asteroid(world);
     }

@@ -1,4 +1,4 @@
-use crate::f32;
+use std::f32;
 
 #[derive(Debug)]
 pub struct Position {
