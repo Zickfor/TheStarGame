@@ -6,6 +6,7 @@ use macroquad::window::{clear_background, screen_height, screen_width};
 
 use macroquad::texture::{draw_texture_ex, DrawTextureParams};
 use macroquad::color::{BLACK, WHITE};
+use macroquad::miniquad::debug;
 use macroquad::prelude::Texture2D;
 use crate::components::{ObjectType, Position, Rotation, UnderControl};
 
@@ -28,6 +29,7 @@ pub fn set_camera_on_ship(world: &mut World) {
 pub fn texture_drawer(world: &mut World, textures: &HashMap<String, Texture2D>) {
     clear_background(BLACK);
     set_camera_on_ship(world);
+    let mut c: usize = 0;
     for (_id, (pos, rot, object_type)) in world.query_mut::<(&Position, &Rotation, &ObjectType)>() {
         let params = DrawTextureParams {
             dest_size: None,
@@ -41,13 +43,15 @@ pub fn texture_drawer(world: &mut World, textures: &HashMap<String, Texture2D>) 
         match object_type {
             ObjectType::Ship => {
                 draw_texture_ex(textures.get("ship.png").unwrap(), pos.x, pos.y, WHITE, params)
-            },
+            }
             ObjectType::Asteroid => {
                 draw_texture_ex(textures.get("asteroid.png").unwrap(), pos.x, pos.y, WHITE, params)
-            },
+            }
             ObjectType::Bullet => {
                 draw_texture_ex(textures.get("bullet.png").unwrap(), pos.x, pos.y, WHITE, params)
             }
         }
+        c += 1;
     }
+    debug!("texture_drawer handled {} entities", c)
 }

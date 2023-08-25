@@ -38,7 +38,7 @@ impl Game {
 #[derive(Default)]
 struct Server {
     world: World,
-    ticks: u64
+    ticks: u64,
 }
 
 impl Server {
@@ -53,14 +53,15 @@ impl Server {
 
     fn tick(&mut self) {
         controls::handle_movement_controls(&mut self.world);
-        physics::system_motion(&mut self.world);
+        physics::speed_update(&mut self.world);
+        physics::position_update(&mut self.world);
         self.ticks += 1;
     }
 }
 
 #[derive(Default, Clone)]
 struct Client {
-    textures: HashMap<String, Texture2D>
+    textures: HashMap<String, Texture2D>,
 }
 
 impl Client {
@@ -84,5 +85,5 @@ impl Client {
 
 enum GameState {
     Pause,
-    Play
+    Play,
 }

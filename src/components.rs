@@ -28,5 +28,31 @@ pub struct UnderControl;
 #[derive(Debug)]
 pub struct MaxSpeed(pub(crate) f32);
 
-#[derive(Debug)]
-pub struct VelocityPower(pub(crate) f32);
+#[derive(Debug, Copy, Clone)]
+pub struct VelocityPower(f32);
+
+impl VelocityPower {
+    pub fn new(value: f32) -> Self {
+        Self(value)
+    }
+
+    pub fn get_mpl(&self) -> f32 {
+        self.0
+    }
+
+    pub fn set_mpl(&mut self, new_value: f32) {
+        self.0 = new_value
+    }
+
+    pub fn speed_up(&mut self) {
+        if self.get_mpl() < 1.0 {
+            self.set_mpl(self.get_mpl() + 0.1)
+        }
+    }
+
+    pub fn speed_down(&mut self) {
+        if self.get_mpl() > -0.2 {
+            self.set_mpl(self.get_mpl() - 0.1)
+        }
+    }
+}

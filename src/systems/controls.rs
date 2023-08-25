@@ -2,30 +2,26 @@ use std::f32::consts::PI;
 
 use hecs::World;
 use macroquad::input::{is_key_down, is_key_pressed, KeyCode};
+use macroquad::logging::debug;
 
-use crate::components::{MaxSpeed, Position, Rotation, Speed, UnderControl, VelocityPower};
-use crate::utils;
+use crate::components::{MaxSpeed, Rotation, Speed, UnderControl, VelocityPower};
 
 pub fn handle_movement_controls(world: &mut World) {
-    let ship = utils::get_ship(world);
-    let (_pos, rot, speed, _under_control, velocity_power, max_speed) = world.query_one_mut::<(&Position, &mut Rotation, &mut Speed, &UnderControl, &mut VelocityPower, &MaxSpeed)>(ship).unwrap();
-
-    if is_key_pressed(KeyCode::W) {
-        if velocity_power.0 < 1.0 {
-            velocity_power.0 += 0.1;
+    let mut c: usize = 0;
+    for (_id, (rot, speed, _under_control, velocity_power, max_speed)) in world.query_mut::<(&mut Rotation, &mut Speed, &UnderControl, &mut VelocityPower, &MaxSpeed)>().into_iter() {
+        if is_key_pressed(KeyCode::W) {
+            velocity_power.speed_up()
         }
-        speed.0 = max_speed.0 * velocity_power.0;
-    }
-    if is_key_pressed(KeyCode::S) {
-        if velocity_power.0 >= -0.1 {
-            velocity_power.0 -= 0.1;
+        if is_key_pressed(KeyCode::S) {
+            velocity_power.speed_down()
         }
-        speed.0 = max_speed.0 * velocity_power.0;
+        if is_key_down(KeyCode::A) {
+            rot.0 += PI / 180.0;
+        }
+        if is_key_down(KeyCode::D) {
+            rot.0 -= PI / 180.0;
+        }
+        c += 1;
     }
-    if is_key_down(KeyCode::A) {
-        rot.0 += PI / 180.0;
-    }
-    if is_key_down(KeyCode::D) {
-        rot.0 -= PI / 180.0;
-    }
+    debug!("handle_movement_controls handled {} entities", c)
 }
