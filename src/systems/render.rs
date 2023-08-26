@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::f32::consts::PI;
 use hecs::World;
 use macroquad::camera::{Camera2D, set_camera};
 use macroquad::math::Rect;
@@ -30,11 +31,11 @@ pub fn texture_drawer(world: &mut World, textures: &HashMap<String, Texture2D>) 
     clear_background(BLACK);
     set_camera_on_ship(world);
     let mut c: usize = 0;
-    for (_id, (pos, rot, object_type)) in world.query_mut::<(&Position, &Rotation, &ObjectType)>() {
+    for (id, (pos, rot, object_type)) in world.query_mut::<(&Position, &Rotation, &ObjectType)>() {
         let params = DrawTextureParams {
             dest_size: None,
             source: None,
-            rotation: rot.0,
+            rotation: rot.0 + PI / 2.0,
             flip_x: false,
             flip_y: false,
             pivot: None,
@@ -42,12 +43,18 @@ pub fn texture_drawer(world: &mut World, textures: &HashMap<String, Texture2D>) 
 
         match object_type {
             ObjectType::Ship => {
-                draw_texture_ex(textures.get("ship.png").unwrap(), pos.x, pos.y, WHITE, params)
+                let x = pos.x - textures.get("ship.png").unwrap().width() / 2.0;
+                let y = pos.y - textures.get("ship.png").unwrap().height() / 2.0;
+                draw_texture_ex(textures.get("ship.png").unwrap(), x, y, WHITE, params)
             }
             ObjectType::Asteroid => {
+                let x = pos.x - textures.get("asteroid.png").unwrap().width() / 2.0;
+                let y = pos.y - textures.get("asteroid.png").unwrap().height() / 2.0;
                 draw_texture_ex(textures.get("asteroid.png").unwrap(), pos.x, pos.y, WHITE, params)
             }
             ObjectType::Bullet => {
+                let x = pos.x - textures.get("bullet.png").unwrap().width() / 2.0;
+                let y = pos.y - textures.get("bullet.png").unwrap().height() / 2.0;
                 draw_texture_ex(textures.get("bullet.png").unwrap(), pos.x, pos.y, WHITE, params)
             }
         }

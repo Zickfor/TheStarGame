@@ -53,6 +53,10 @@ impl Server {
 
     fn tick(&mut self) {
         controls::handle_movement_controls(&mut self.world);
+        match controls::handle_fire_controls(&mut self.world) {
+            None => {}
+            Some(bullets) => { self.world.spawn(bullets); }
+        };
         physics::speed_update(&mut self.world);
         physics::position_update(&mut self.world);
         self.ticks += 1;

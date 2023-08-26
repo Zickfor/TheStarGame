@@ -1,31 +1,31 @@
 use std::f32;
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Position {
     pub(crate) x: f32,
     pub(crate) y: f32,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Rotation(pub(crate) f32);
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum ObjectType {
     Ship,
     Asteroid,
     Bullet,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Copy, Clone)]
 pub struct Speed(pub(crate) f32);
 
 #[derive(Debug)]
 pub struct Size(pub(crate) f32);
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct UnderControl;
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct MaxSpeed(pub(crate) f32);
 
 #[derive(Debug, Copy, Clone)]

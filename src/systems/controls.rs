@@ -4,7 +4,7 @@ use hecs::World;
 use macroquad::input::{is_key_down, is_key_pressed, KeyCode};
 use macroquad::logging::debug;
 
-use crate::components::{MaxSpeed, Rotation, Speed, UnderControl, VelocityPower};
+use crate::components::{MaxSpeed, ObjectType, Position, Rotation, Speed, UnderControl, VelocityPower};
 
 pub fn handle_movement_controls(world: &mut World) {
     let mut c: usize = 0;
@@ -24,4 +24,22 @@ pub fn handle_movement_controls(world: &mut World) {
         c += 1;
     }
     debug!("handle_movement_controls handled {} entities", c)
+}
+
+pub fn handle_fire_controls(world: &mut World) -> Option<(Position, Rotation, Speed, MaxSpeed, VelocityPower, ObjectType)> {
+    if is_key_pressed(KeyCode::Key1) {
+        let entities = world.query::<(&Position, &Rotation, &UnderControl)>()
+            .iter()
+            .map(|(e, (&position, &rotation, &control))| (e, position, rotation, control))
+            .collect::<Vec<_>>();
+        let mut return_obj = (Position { x: 0.0, y: 0.0 }, Rotation(0.0), Speed(1000.0), MaxSpeed(1000.0), VelocityPower::new(1.0), ObjectType::Bullet);
+        for e in entities {
+            return_obj.0 = e.1;
+            return_obj.1 = e.2;
+        }
+        debug!("Created bullet with {:?}", return_obj);
+        Some(return_obj)
+    } else {
+        None
+    }
 }
